@@ -19,23 +19,44 @@ By evaluating unsecured loans across a continuous risk continuum rather than bin
 
 ## 🚀 The Multi-Stage Pipeline Architecture
 
-### Phase 1: Data Preprocessing & Feature Engineering
-*   **The Data Realism:** Utilized an unmanipulated, highly imbalanced consumer credit file to test the framework under realistic retail default distributions (~15% default rate baseline).
-*   **Strategic Feature Generation:** Engineered a dynamic **Monthly Loan-to-Income Ratio** utilizing the installment footprint and natural logarithm income parameters to extract true consumer cash-flow pressure.
-*   **Visual Validation:** 
-    ![Feature Signal Verification](assets/feature_signal_kde.png)
-    *Insight: The distinct right-shift of the default curve (`target 1`) visually demonstrates robust predictive variance prior to feeding features into our machine learning models.*
+### 📊 Phase 1: Data Preprocessing & Feature Engineering
+* **The Data Realism:** Utilized an unmanipulated, highly imbalanced consumer credit file to test the framework under realistic retail default distributions (~15% default rate baseline).
+* **Strategic Feature Generation:** Engineered a dynamic **Monthly Loan-to-Income Ratio** utilizing the installment footprint and natural logarithm income parameters to extract true consumer cash-flow pressure.
+* **Visual Validation:** 
 
-### Phase 2: Credit Risk Modeling & Continuous PD Extraction
-*   **The Core Framework:** Trained an Extreme Gradient Boosted (XGBoost) model optimized via a `binary:logistic` objective function to extract a smooth, calibrated **Probability of Default (PD)** matrix.
-*   **Asymmetric Imbalance Resolution:** Configured an explicit `scale_pos_weight` penalty factor inside the loss function to counteract minority class skewness without fabricating synthetic entries.
-*   **Evaluation Matrices:** Bypassed deceptive baseline accuracy. Utilized **ROC-AUC** to quantify ranking discrimination power and **Precision-Recall AUC (PR-AUC)** to navigate strict credit underwriting sensitivity limits.
+<p align="center">
+  <img src="assets/feature_signal_kde.png" alt="Feature Signal Verification" width="850px">
+</p>
 
-### Phase 3: Capital Optimization & Mapping the Frontier
-*   **Asset Pricing Translation:** For each asset, individual continuous default probabilities were parsed into an institutional Expected Return formula assuming a conservative 100% Loss Given Default (LGD):
+> **Insight:** As demonstrated in our engineered feature distribution plot (`feature_signal_kde.png`), the distinct right-shift of the default curve (`target 1`) visually validates our financial hypothesis. Borrowers who ultimately default carry a significantly higher monthly installment burden relative to their gross income, giving our machine learning models a high-signal feature to split on.
+
+---
+
+### 🎯 Phase 2: Credit Risk Modeling & Continuous PD Extraction
+* **The Core Framework:** Trained an Extreme Gradient Boosted (XGBoost) model optimized via a `binary:logistic` objective function to extract a smooth, calibrated **Probability of Default (PD)** matrix.
+* **Asymmetric Imbalance Resolution:** Configured an explicit `scale_pos_weight` penalty factor inside the loss function to counteract minority class skewness without fabricating synthetic entries.
+* **Evaluation Matrices:** Bypassed deceptive baseline accuracy. Utilized **ROC-AUC** to quantify ranking discrimination power and **Precision-Recall AUC (PR-AUC)** to navigate strict credit underwriting sensitivity limits.
+
+<p align="center">
+  <img src="assets/evaluation_curves.png" alt="Model Evaluation Curves" width="850px">
+</p>
+
+> **Insight:** The performance charts (`evaluation_curves.png`) demonstrate the model's institutional readiness. The ROC curve confirms robust risk ranking discrimination, while the Precision-Recall curve maps the precise operational trade-offs required to optimize underwriting thresholds for imbalanced retail credit data.
+
+---
+
+### 🧮 Phase 3: Capital Optimization & Mapping the Frontier
+* **Asset Pricing Translation:** For each asset, individual continuous default probabilities were parsed into an institutional Expected Return formula assuming a conservative 100% Loss Given Default (LGD):
     $$R_i = (1 - PD_i) \times \text{Interest Rate}_i - (PD_i \times 1.0)$$
-*   **Tranche Covariance Matrix:** Individual loans were stratified into distinct credit risk tranches to construct an $N \times N$ variance-covariance matrix ($\Sigma$).
-*   **Markowitz Capital Allocation:** Executed a 5,000-iteration Monte Carlo simulation mapping out the risk-return landscape to locate the **Maximum Sharpe Ratio** boundary and **Global Minimum Variance** targets.
+* **Tranche Covariance Matrix:** Individual loans were stratified into distinct credit risk tranches to construct an $N \times N$ variance-covariance matrix ($\Sigma$).
+* **Markowitz Capital Allocation:** Executed a 5,000-iteration Monte Carlo simulation mapping out the risk-return landscape to locate the **Maximum Sharpe Ratio** boundary and **Global Minimum Variance** targets.
+
+<p align="center">
+  <img src="assets/efficient_frontier.png" alt="The Efficient Lending Frontier" width="850px">
+</p>
+
+> **Insight:** The final simulation plot (`efficient_frontier.png`) maps out the complete mathematical boundary of our credit portfolio. By identifying the Maximum Sharpe Ratio and Global Minimum Variance allocations, the framework provides actionable asset distribution metrics for institutional credit management.
+
 
 ---
 
@@ -52,5 +73,5 @@ A core finding of this end-to-end simulation is that under uncalibrated retail d
 
 1. **Clone the Repository:**
    ```bash
-   git clone [https://github.com/yourusername/efficient-lending-frontier.git](https://github.com/yourusername/efficient-lending-frontier.git)
+   git clone [https://github.com/Val-The-Analyst/efficient-lending-frontier.git](https://github.com/Val-The-Analyst/efficient-lending-frontier.git)
    cd efficient-lending-frontier
